@@ -100,10 +100,12 @@ pub const MANTA_SEPOLIA: u32 = 3441006;
 pub const BISON_TESTNET: u32 = 24768;
 pub const SLINKY_TESTNET: u32 = 88338;
 pub const DUCK_TESTNET: u32 = 202105;
-pub const DEEPDEX_TESTNET: u32 = 4833;
 pub const SAFEX_TESTNET: u32 = 110010;
-pub const DEEPX_DEVNET: u32 = 4835;
-pub const DEEPX_TESTNET: u32 = 4836;
+pub const DEEPDEX_TESTNET: u32 = 4833;  // discarded
+pub const DEEPX_DEVNET: u32 = 4835;     // discarded
+pub const DEEPX_TESTNET: u32 = 4836;    // discarded
+pub const DEEPX_BETA_DEVNET: u32 = 4845;
+pub const DEEPX_BETA_TESTNET: u32 = 4846;
 
 pub const LOCAL_CHAIN: u32 = 31337;
 
@@ -181,7 +183,7 @@ pub const CKB_TESTNET: u32 = 0xe43cbf03;
 // "Fractal-Testnet"
 pub const FRACTAL_TESTNET: u32 = 0xd315bbb0;
 
-pub const CHAIN_IDS: [u32; 117] = [
+pub const CHAIN_IDS: [u32; 119] = [
     ETHEREUM_MAINNET,
     OPTIMISM_MAINNET,
     POLYGON_MAINNET,
@@ -299,6 +301,8 @@ pub const CHAIN_IDS: [u32; 117] = [
     SAFEX_TESTNET,
     DEEPX_DEVNET,
     DEEPX_TESTNET,
+    DEEPX_BETA_DEVNET,
+    DEEPX_BETA_TESTNET,
 ];
 
 #[derive(Debug, Clone, Encode, Decode, Serialize, Deserialize, Default, PartialEq)]
@@ -394,8 +398,8 @@ impl ChainType {
             | ULTRA_LIQUID_MAINNET | ULTRA_LIQUID_TESTNET
             | SAFEX_TESTNET
             | DEEPDEX_TESTNET
-            | DEEPX_DEVNET
-            | DEEPX_TESTNET  => Self::Eth,
+            | DEEPX_DEVNET | DEEPX_TESTNET
+            | DEEPX_BETA_DEVNET | DEEPX_BETA_TESTNET  => Self::Eth,
             BITCOIN_MAINNET | BITCOIN_TESTNET | DOGECOIN_MAINNET | DOGECOIN_TESTNET => Self::Btc,
             SOLANA_MAINNET | SOLANA_TESTNET | SOLANA_DEVNET => Self::Solana,
             FILECOIN_TESTNET | FILECOIN_MAINNET => Self::Fil,
