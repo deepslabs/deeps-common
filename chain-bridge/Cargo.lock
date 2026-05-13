@@ -15,6 +15,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c3ac9f8b63eca6fd385229b3675f6cc0dc5c8a5c8a54a59d4f52ffd670d87b0c"
 
 [[package]]
+name = "deeps-chain-bridge"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "parity-scale-codec",
+ "serde",
+]
+
+[[package]]
 name = "equivalent"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -128,15 +137,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.90",
-]
-
-[[package]]
-name = "sxn-chain-bridge"
-version = "0.1.0"
-dependencies = [
- "hex",
- "parity-scale-codec",
- "serde",
 ]
 
 [[package]]
