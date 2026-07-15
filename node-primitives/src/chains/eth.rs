@@ -37,8 +37,7 @@ pub fn eth_abi_encode_for_random_num(
 ) -> Result<Vec<u8>, String> {
     let heads_len = 5 * 32;
     let mut result = Vec::with_capacity(heads_len);
-    let mut fixed_chain_id = [0u8; 32];
-    sp_core::U256::from(chain_id).to_big_endian(&mut fixed_chain_id);
+    let fixed_chain_id = sp_core::U256::from(chain_id).to_big_endian();
     if vrn_port.len() != 20 {
         return Err(format!(
             "invalid vrn port address length: {:?}",

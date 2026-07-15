@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use codec::{Encode, Decode};
+use codec::{Encode, Decode, DecodeWithMemTracking};
 
-#[derive(Encode, Decode, PartialEq, Clone, Debug)]
+#[derive(Encode, Decode, DecodeWithMemTracking, PartialEq, Clone, Debug)]
 pub enum AssetType {
     Native,
     Brc20,
