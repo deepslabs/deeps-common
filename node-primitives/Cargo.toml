@@ -36,6 +36,7 @@ std = [
     "chain-bridge/std",
     "libsecp256k1/std",
     "serde",
+    "bls-signatures",
 ]
 
-crypto = ["sha2", "sha3", "bls-signatures"]
+crypto = ["sha2", "sha3"]

@@ -15,11 +15,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#[cfg(feature = "std")]
 mod bls;
 mod ecdsa;
 mod eddsa;
 mod schnorr;
 
+#[cfg(feature = "std")]
 pub use bls::*;
 pub use ecdsa::*;
 pub use eddsa::*;

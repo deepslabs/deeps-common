@@ -18,7 +18,7 @@
 use sp_core::bounded::alloc::{string::{ToString, String}, format};
 use chain_bridge::utils::disintegrate_fil_msg;
 use libsecp256k1::Message;
-#[cfg(feature = "crypto")]
+#[cfg(all(feature = "crypto", feature = "std"))]
 use crate::bls_verify;
 
 pub fn verify_filecoin(pubkey: &[u8], raw: &[u8], sig: &[u8], engine: &str) -> Result<(), String> {
@@ -40,14 +40,14 @@ pub fn verify_filecoin(pubkey: &[u8], raw: &[u8], sig: &[u8], engine: &str) -> R
             }
         }
         "BLS" => {
-            #[cfg(feature = "crypto")]
+            #[cfg(all(feature = "crypto", feature = "std"))]
             {
                 let mut msg = [0; 38];
                 msg.copy_from_slice(&msg_vec);
                 bls_verify(pubkey, &msg, sig).map_err(|e| format!("filecoin bls signature verify failed for: {e:?}"))?;
             }
-            #[cfg(not(feature = "crypto"))]
-            return Err(format!("BLS verification not available without crypto feature"));
+            #[cfg(not(all(feature = "crypto", feature = "std")))]
+            return Err(format!("BLS verification not available without crypto+std feature"));
         }
         _ => return Err(format!("unsupport engine: {engine:?} to verify filecoin signature"))
     }
