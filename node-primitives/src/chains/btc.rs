@@ -31,10 +31,10 @@ pub fn verify_btc_ecdsa(pubkey: &[u8], msg: &[u8], sig: &[u8]) -> Result<(), Str
     for i in 0..msgs.len() {
         let mut msg = [0u8; 32];
         msg.copy_from_slice(&msgs[i]);
-        let message = secp256k1::Message::parse(&msg);
-        let signature = secp256k1::Signature::parse_slice(&sigs[i][..64]).map_err(|e| e.to_string())?;
-        let pubkey = secp256k1::PublicKey::parse_slice(pubkey, None).map_err(|e| e.to_string())?;
-        if !secp256k1::verify(&message, &signature, &pubkey) {
+        let message = libsecp256k1::Message::parse(&msg);
+        let signature = libsecp256k1::Signature::parse_standard_slice(&sigs[i][..64]).map_err(|e| e.to_string())?;
+        let pubkey = libsecp256k1::PublicKey::parse_slice(pubkey, None).map_err(|e| e.to_string())?;
+        if !libsecp256k1::verify(&message, &signature, &pubkey) {
             return Err("btc ecdsa signature verify failed".to_string());
         }
     }

@@ -1,6 +1,6 @@
 [package]
 name = "deeps-node-primitives"
-authors = ["SafeXNetwork"]
+authors = ["SafeXNetwork", "DeepSlabs"]
 edition = "2021"
 version = "0.1.0"
 
@@ -17,11 +17,11 @@ fp-account = { git = "https://github.com/deepslabs/frontier.git", branch = "deep
 # crypto
 sha2 = { version = "0.9", default-features = false, optional = true }
 sha3 = { version = "0.9", default-features = false, optional = true }
-hex = { version = "0.4", default-features = false, optional = true }
+hex = { version = "0.4", default-features = false }
 bls-signatures = { version = "0.13.1", optional = true }
-libsecp256k1 = { version = "0.3.2", default-features = false, features = ["hmac"], optional = true }
+libsecp256k1 = { version = "0.7", default-features = false, features = ["static-context"] }
 
-chain-bridge = { path = "../chain-bridge", package = "deeps-chain-bridge"}
+chain-bridge = { path = "../chain-bridge", package = "deeps-chain-bridge", default-features = false }
 
 [patch.'https://github.com/w3f/fflonk']
 fflonk = { git = "https://www.github.com/w3f/fflonk", rev = "be95d4c971b1d15b5badfc06ff13f5c07987d484" }
@@ -33,7 +33,9 @@ std = [
     "sp-runtime/std",
     "sp-io/std",
     "fp-account/std",
+    "chain-bridge/std",
+    "libsecp256k1/std",
     "serde",
 ]
 
-crypto = ["sha2", "sha3", "hex", "bls-signatures", "libsecp256k1"]
+crypto = ["sha2", "sha3", "bls-signatures"]

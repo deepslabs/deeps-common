@@ -17,13 +17,16 @@
 
 use sp_core::bounded::alloc::{string::String, format, vec, vec::Vec};
 use sp_core::U256;
+#[cfg(feature = "crypto")]
 use crate::{Hash256, inner_ecdsa_verify};
 
 /// Verify eth ecdsa signature(sha2_256)
+#[cfg(feature = "crypto")]
 pub fn eth_ecdsa_verify(pubkey: &[u8], msg: &[u8], sig: &[u8], hash256: Option<Hash256>) -> Result<(), String> {
     inner_ecdsa_verify(pubkey, msg, sig, hash256, to_eth_signed_message_hash)
 }
 
+#[cfg(feature = "crypto")]
 fn to_eth_signed_message_hash(msg: Vec<u8>) -> Vec<u8> {
     chain_bridge::utils::to_eth_signed_message_hash(&msg, sp_io::hashing::keccak_256)
 }

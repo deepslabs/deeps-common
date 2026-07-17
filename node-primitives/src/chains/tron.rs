@@ -16,13 +16,16 @@
 // limitations under the License.
 
 use sp_core::bounded::alloc::{vec::Vec, string::String};
+#[cfg(feature = "crypto")]
 use crate::{crypto::inner_ecdsa_verify, Hash256};
 
+#[cfg(feature = "crypto")]
 pub fn to_tron_signed_message_hash(msg: Vec<u8>) -> Vec<u8> {
     chain_bridge::utils::to_eth_signed_message_hash(&msg, sp_io::hashing::keccak_256)
 }
 
 /// Verify tron ecdsa signature(sha2_256)
+#[cfg(feature = "crypto")]
 pub fn tron_ecdsa_verify(pubkey: &[u8], msg: &[u8], sig: &[u8], hash256: Option<Hash256>) -> Result<(), String> {
     inner_ecdsa_verify(pubkey, msg, sig, hash256, to_tron_signed_message_hash)
 }

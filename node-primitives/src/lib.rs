@@ -19,6 +19,9 @@
 #![allow(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
+#[cfg(not(feature = "std"))]
+extern crate alloc;
+
 pub mod chains;
 #[cfg(feature = "crypto")]
 pub mod crypto;

@@ -17,7 +17,8 @@
 
 use sp_core::bounded::alloc::{string::{ToString, String}, format};
 use chain_bridge::utils::disintegrate_fil_msg;
-use secp256k1::Message;
+use libsecp256k1::Message;
+#[cfg(feature = "crypto")]
 use crate::bls_verify;
 
 pub fn verify_filecoin(pubkey: &[u8], raw: &[u8], sig: &[u8], engine: &str) -> Result<(), String> {
@@ -32,16 +33,21 @@ pub fn verify_filecoin(pubkey: &[u8], raw: &[u8], sig: &[u8], engine: &str) -> R
             let mut msg = [0; 32];
             msg.copy_from_slice(&msg_vec);
             let message = Message::parse(&msg);
-            let signature = secp256k1::Signature::parse_slice(&sig[..64]).map_err(|e| e.to_string())?;
-            let pubkey = secp256k1::PublicKey::parse_slice(pubkey, None).map_err(|e| e.to_string())?;
-            if !secp256k1::verify(&message, &signature, &pubkey) {
+            let signature = libsecp256k1::Signature::parse_standard_slice(&sig[..64]).map_err(|e| e.to_string())?;
+            let pubkey = libsecp256k1::PublicKey::parse_slice(pubkey, None).map_err(|e| e.to_string())?;
+            if !libsecp256k1::verify(&message, &signature, &pubkey) {
                 return Err("filecoin ecdsa signature verify failed".to_string());
             }
         }
         "BLS" => {
-            let mut msg = [0; 38];
-            msg.copy_from_slice(&msg_vec);
-            bls_verify(pubkey, &msg, sig).map_err(|e| format!("filecoin bls signature verify failed for: {e:?}"))?;
+            #[cfg(feature = "crypto")]
+            {
+                let mut msg = [0; 38];
+                msg.copy_from_slice(&msg_vec);
+                bls_verify(pubkey, &msg, sig).map_err(|e| format!("filecoin bls signature verify failed for: {e:?}"))?;
+            }
+            #[cfg(not(feature = "crypto"))]
+            return Err(format!("BLS verification not available without crypto feature"));
         }
         _ => return Err(format!("unsupport engine: {engine:?} to verify filecoin signature"))
     }

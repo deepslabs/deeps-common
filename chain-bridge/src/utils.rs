@@ -16,6 +16,7 @@
 // limitations under the License.
 
 use codec::{Encode, Decode, DecodeWithMemTracking};
+use alloc::{string::{String, ToString}, vec::Vec};
 
 #[derive(Encode, Decode, DecodeWithMemTracking, PartialEq, Clone, Debug)]
 pub enum AssetType {
@@ -44,17 +45,17 @@ pub fn disintegrate_btc_msg(
     let raw_msg = hex::decode(raw_msg).map_err(|e| e.to_string())?;
     let btc_msg = BtcTxMessage::decode(
         &mut raw_msg.as_slice(),
-    ).map_err(|e| format!("BtcTxMessage decode from raw msg faild for: {e:?}"))?;
+    ).map_err(|e| alloc::format!("BtcTxMessage decode from raw msg faild for: {e:?}"))?;
 
     match btc_msg.asset {
         AssetType::Native | AssetType::Runes => {
             if btc_msg.txs.len() != 1 {
-                return Err(format!("btc msg invalid tx num {}, expect 1", btc_msg.txs.len()));
+                return Err(alloc::format!("btc msg invalid tx num {}, expect 1", btc_msg.txs.len()));
             }
             for tx in &btc_msg.txs {
                 if tx.hash_to_sign.is_empty() {
                     return Err(
-                        format!(
+                        alloc::format!(
                             "invalid tx hash legnth to sign {}",
                             tx.hash_to_sign.len(),
                         )
@@ -62,7 +63,7 @@ pub fn disintegrate_btc_msg(
                 }
                 if tx.hash_to_sign.len() != tx.input_values.len() {
                     return Err(
-                        format!(
+                        alloc::format!(
                             "btc msg invalid hash_to_sign num {} with input_values num {}",
                             tx.hash_to_sign.len(),
                             tx.input_values.len()
@@ -73,12 +74,12 @@ pub fn disintegrate_btc_msg(
         },
         AssetType::Brc20 => {
             if btc_msg.txs.len() != 3 {
-                return Err(format!("btc msg invalid tx num {}, expect 3", btc_msg.txs.len()));
+                return Err(alloc::format!("btc msg invalid tx num {}, expect 3", btc_msg.txs.len()));
             }
             for tx in &btc_msg.txs {
                 if tx.hash_to_sign.is_empty() {
                     return Err(
-                        format!(
+                        alloc::format!(
                             "invalid tx hash legnth to sign {}",
                             tx.hash_to_sign.len(),
                         )
@@ -162,7 +163,7 @@ pub fn to_eth_signed_message_hash<F, V: AsRef<[u8]>>(msg: &[u8], keccak256: F) -
 where
     F: Fn(&[u8]) -> V,
 {
-    let mut eth_message = format!("{}{}", PREFIX, msg.len()).into_bytes();
+    let mut eth_message = alloc::format!("{}{}", PREFIX, msg.len()).into_bytes();
     eth_message.extend_from_slice(msg);
     keccak256(&eth_message).as_ref().to_vec()
 }
@@ -173,7 +174,7 @@ pub fn to_tron_signed_message_hash<F, V: AsRef<[u8]>>(msg: &[u8], keccak256: F) 
 where
     F: Fn(&[u8]) -> V,
 {
-    let mut tron_message = format!("{}{}", TRON_PREFIX, msg.len()).into_bytes();
+    let mut tron_message = alloc::format!("{}{}", TRON_PREFIX, msg.len()).into_bytes();
     tron_message.extend_from_slice(msg);
     keccak256(&tron_message).as_ref().to_vec()
 }

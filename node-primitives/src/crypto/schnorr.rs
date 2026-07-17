@@ -18,8 +18,8 @@
 use sp_core::bounded::alloc::{string::{ToString, String}, format};
 use core::ops::Neg;
 use chain_bridge::utils::disintegrate_btc_msgs_and_sigs;
-use secp256k1::curve::{Affine, Jacobian, Scalar, ECMULT_CONTEXT, ECMULT_GEN_CONTEXT};
-use secp256k1::{Error as ECError, PublicKey as ECPK, PublicKeyFormat, SecretKey as ECSK};
+use libsecp256k1::curve::{Affine, Jacobian, Scalar};
+use libsecp256k1::{ECMULT_CONTEXT, ECMULT_GEN_CONTEXT, Error as ECError, PublicKey as ECPK, PublicKeyFormat, SecretKey as ECSK};
 use sha2::{Digest, Sha256};
 
 pub fn sr25519_verify(pubkey: &[u8], msg: &[u8], sig: &[u8]) -> Result<(), String> {

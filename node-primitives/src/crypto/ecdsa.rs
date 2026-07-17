@@ -53,10 +53,10 @@ pub fn inner_ecdsa_verify<F>(
 
     let mut msg = [0u8; 32];
     msg.copy_from_slice(&hash);
-    let message = secp256k1::Message::parse(&msg);
-    let signature = secp256k1::Signature::parse_slice(sig).map_err(|e| e.to_string())?;
-    let pubkey = secp256k1::PublicKey::parse_slice(pubkey, None).map_err(|e| e.to_string())?;
-    if !secp256k1::verify(&message, &signature, &pubkey) {
+    let message = libsecp256k1::Message::parse(&msg);
+    let signature = libsecp256k1::Signature::parse_standard_slice(sig).map_err(|e| e.to_string())?;
+    let pubkey = libsecp256k1::PublicKey::parse_slice(pubkey, None).map_err(|e| e.to_string())?;
+    if !libsecp256k1::verify(&message, &signature, &pubkey) {
         return Err("ecdsa secp256k1 verify signature failed".to_string());
     }
     Ok(())
@@ -80,16 +80,16 @@ fn inner_ecdsa_recover<F>(msg: &[u8], sig: &[u8], hash256: Option<Hash256>, expa
 
     let mut msg = [0u8; 32];
     msg.copy_from_slice(&hash);
-    let message = secp256k1::Message::parse(&msg);
-    let signature = match secp256k1::Signature::parse_slice(&sig[..64]) {
+    let message = libsecp256k1::Message::parse(&msg);
+    let signature = match libsecp256k1::Signature::parse_standard_slice(&sig[..64]) {
         Ok(sig) => sig,
         Err(_) => return Vec::new(),
     };
-    let recovery_id = match secp256k1::RecoveryId::parse(sig[64]) {
+    let recovery_id = match libsecp256k1::RecoveryId::parse(sig[64]) {
         Ok(recovery_id) => recovery_id,
         Err(_) => return Vec::new(),
     };
-    match secp256k1::recover(&message, &signature, &recovery_id) {
+    match libsecp256k1::recover(&message, &signature, &recovery_id) {
         Ok(pk) => pk.serialize_compressed().to_vec(),
         Err(_) => Vec::new(),
     }
