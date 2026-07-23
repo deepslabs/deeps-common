@@ -19,7 +19,7 @@
 pub use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
 #[cfg(feature = "std")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum RawRewardDestination {
     Staked,
     Stash,
@@ -29,7 +29,7 @@ pub enum RawRewardDestination {
 }
 
 #[cfg(feature = "std")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RawNominatorInfo {
     pub stash_account: String,
     pub target_validators: Vec<String>,
@@ -39,7 +39,7 @@ pub struct RawNominatorInfo {
 }
 
 #[cfg(feature = "std")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RawValidatorInfo {
     pub stash_account: String,
     pub state: bool,
@@ -51,7 +51,7 @@ pub struct RawValidatorInfo {
 }
 
 #[cfg(feature = "std")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RawProvider {
     pub pid: String,
     pub owner: String,
