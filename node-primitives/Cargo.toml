@@ -23,9 +23,6 @@ libsecp256k1 = { version = "0.7", default-features = false, features = ["static-
 
 chain-bridge = { path = "../chain-bridge", package = "deeps-chain-bridge", default-features = false }
 
-[patch.'https://github.com/w3f/fflonk']
-fflonk = { git = "https://www.github.com/w3f/fflonk", rev = "be95d4c971b1d15b5badfc06ff13f5c07987d484" }
-
 [features]
 default = ["std", "crypto"]
 std = [
